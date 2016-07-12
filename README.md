@@ -48,7 +48,7 @@ export default ImageList;
 ## Props
 
 ### src
-Type: String Default: null
+Type: String Default: null Required: true
 
 ## License
 

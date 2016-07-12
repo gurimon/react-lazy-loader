@@ -1,11 +1,10 @@
 {
   "name": "react-lazy-loader",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "gulp build",
-    "test": "babel src/ --out-dir dist/"
+    "build": "babel src/ --out-dir dist/"
   },
   "repository": {
     "type": "git",
@@ -18,18 +17,12 @@
   },
   "homepage": "https://github.com/gurimon/react-lazy-loader#readme",
   "devDependencies": {
-    "babel-cli": "^6.10.1",
+    "babel-cli": "6.10.1",
     "babel-core": "6.10.4",
     "babel-loader": "6.2.4",
     "babel-preset-es2015": "6.9.0",
     "babel-preset-react": "6.11.1",
     "babel-preset-stage-0": "6.5.0",
-    "gulp": "3.9.1",
-    "gulp-plumber": "1.1.0",
-    "gulp-sourcemaps": "1.6.0",
-    "gulp-uglify": "1.5.4",
-    "gulp-webpack": "1.5.0",
-    "react": "^15.2.1",
-    "webpack": "1.13.1"
+    "react": "15.2.1"
   }
 }

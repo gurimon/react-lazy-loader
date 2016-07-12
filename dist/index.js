@@ -16,6 +16,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var LazyLoad = _react2.default.createClass({
   displayName: 'LazyLoad',
+  getDefaultProps: function getDefaultProps() {
+    return {
+      src: ""
+    };
+  },
   getInitialState: function getInitialState() {
     return {
       src: null,
@@ -24,7 +29,6 @@ var LazyLoad = _react2.default.createClass({
     };
   },
   componentDidMount: function componentDidMount() {
-    var id = this.props.id;
     var src = this.props.src;
     // 要素の位置取得
     var sTop = this.getDOMNode().getBoundingClientRect().top || 0;
@@ -32,16 +36,15 @@ var LazyLoad = _react2.default.createClass({
     // 既に読み込まれていたら
     var isChash = _loader2.default.chash.indexOf(src) >= 0;
     if (isChash) return this._onLoad({ src: src });
-    _loader2.default.createLoader({ id: id, src: src, sTop: sTop, callback: this._onLoad });
+    _loader2.default.createLoader({ src: src, sTop: sTop, callback: this._onLoad });
   },
 
 
   // コンポーネントが削除された場合、遅延読み込みをリセット
   componentWillUnmount: function componentWillUnmount() {
-    _loader2.default.clearLoader(this.props.id);
+    _loader2.default.clearLoader();
   },
   _onLoad: function _onLoad(_ref) {
-    var id = _ref.id;
     var src = _ref.src;
 
     this.setState({ src: src });
@@ -62,7 +65,7 @@ var LazyLoad = _react2.default.createClass({
       right: '0'
     };
 
-    if (!this.state.src) return _react2.default.createElement('img', { style: style, src: '' });
+    if (!this.state.src) return _react2.default.createElement('img', { style: style, src: './images/loading.gif' });
 
     return _react2.default.createElement(
       'div',

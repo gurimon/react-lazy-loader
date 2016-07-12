@@ -12,7 +12,6 @@ var LazyLoader = function () {
   function LazyLoader(params) {
     _classCallCheck(this, LazyLoader);
 
-    var id = params.id;
     var img = params.img;
     var src = params.src;
     var sTop = params.sTop;
@@ -32,7 +31,7 @@ var LazyLoader = function () {
       var _this = this;
 
       this.img.onload = this.img.onerror = this.img.onabort = function () {
-        _this.callback({ id: _this.id, src: _this.src });
+        _this.callback({ src: _this.src });
       };
 
       this.img.src = this.src;
@@ -40,13 +39,12 @@ var LazyLoader = function () {
   }], [{
     key: "createLazyLoader",
     value: function createLazyLoader(_ref) {
-      var id = _ref.id;
       var src = _ref.src;
       var sTop = _ref.sTop;
       var callback = _ref.callback;
 
       var img = new Image();
-      return new LazyLoader({ id: id, img: img, src: src, sTop: sTop, callback: callback });
+      return new LazyLoader({ img: img, src: src, sTop: sTop, callback: callback });
     }
   }]);
 

@@ -1,7 +1,6 @@
 class LazyLoader {
   constructor(params) {
     const {
-      id,
       img,
       src,
       sTop,
@@ -15,14 +14,14 @@ class LazyLoader {
     this.callback = callback;
   }
 
-  static createLazyLoader({ id, src, sTop, callback }) {
+  static createLazyLoader({ src, sTop, callback }) {
     const img = new Image();
-    return new LazyLoader({ id, img, src, sTop, callback });
+    return new LazyLoader({ img, src, sTop, callback });
   }
 
   load() {
     this.img.onload = this.img.onerror = this.img.onabort = () => {
-      this.callback({ id: this.id, src: this.src });
+      this.callback({ src: this.src });
     }
 
     this.img.src = this.src;

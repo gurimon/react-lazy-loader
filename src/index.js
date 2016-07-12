@@ -2,16 +2,21 @@ import React from 'react';
 import LazyLoader from './loader';
 
 const LazyLoad = React.createClass({
+  getDefaultProps() {
+    return {
+      src:  "",
+    }
+  },
+
   getInitialState() {
     return {
-      src: null,
+      src:      null,
       isLoaded: false,
-      isError: false,
+      isError:  false,
     }
   },
 
   componentDidMount() {
-    const id = this.props.id;
     const src = this.props.src;
     // 要素の位置取得
     const sTop = this.getDOMNode().getBoundingClientRect().top || 0;
@@ -19,15 +24,15 @@ const LazyLoad = React.createClass({
     // 既に読み込まれていたら
     const isChash = LazyLoader.chash.indexOf(src) >= 0;
     if(isChash) return this._onLoad({ src });
-    LazyLoader.createLoader({ id, src, sTop, callback: this._onLoad });
+    LazyLoader.createLoader({ src, sTop, callback: this._onLoad });
   },
 
   // コンポーネントが削除された場合、遅延読み込みをリセット
   componentWillUnmount() {
-    LazyLoader.clearLoader(this.props.id);
+    LazyLoader.clearLoader();
   },
 
-  _onLoad({ id, src }) {
+  _onLoad({ src }) {
     this.setState({ src });
   },
 
@@ -49,7 +54,7 @@ const LazyLoad = React.createClass({
       right: '0'
     };
 
-    if(!this.state.src) return <img style={style} src="" />;
+    if(!this.state.src) return <img style={style} src="./images/loading.gif" />;
 
     return (
       <div className="lazyLoader">
