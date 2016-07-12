@@ -49,7 +49,7 @@ const LazyLoad = React.createClass({
       right: '0'
     };
 
-    if(!this.state.src) return <img style={style} src="./images/loading.gif" />;
+    if(!this.state.src) return <img style={style} src="" />;
 
     return (
       <div className="lazyLoader">

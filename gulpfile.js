@@ -6,7 +6,7 @@ var webpack      = require('gulp-webpack');
 var config = require('./webpack.config');
 
 gulp.task('bundle:js', function() {
-  return gulp.src('./src/index.js')
+  return gulp.src('')
     .pipe(sourcemaps.init())
     .pipe(webpack(config))
     .pipe(sourcemaps.write())
