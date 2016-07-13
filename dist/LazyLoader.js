@@ -18,7 +18,6 @@ var LazyLoader = function () {
     var callback = params.callback;
 
 
-    this.id = id;
     this.img = img;
     this.src = src;
     this.sTop = sTop;
