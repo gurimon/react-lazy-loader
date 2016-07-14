@@ -14,12 +14,14 @@ var LazyLoader = function () {
 
     var img = params.img;
     var src = params.src;
+    var dSrc = params.dSrc;
     var sTop = params.sTop;
     var callback = params.callback;
 
 
     this.img = img;
     this.src = src;
+    this.dSrc = dSrc;
     this.sTop = sTop;
     this.callback = callback;
   }
@@ -29,8 +31,12 @@ var LazyLoader = function () {
     value: function load() {
       var _this = this;
 
-      this.img.onload = this.img.onerror = this.img.onabort = function () {
+      this.img.onload = function () {
         _this.callback({ src: _this.src });
+      };
+
+      this.img.onerror = this.img.onabort = function () {
+        _this.callback({ src: _this.dSrc });
       };
 
       this.img.src = this.src;
@@ -39,11 +45,12 @@ var LazyLoader = function () {
     key: "createLazyLoader",
     value: function createLazyLoader(_ref) {
       var src = _ref.src;
+      var dSrc = _ref.dSrc;
       var sTop = _ref.sTop;
       var callback = _ref.callback;
 
       var img = new Image();
-      return new LazyLoader({ img: img, src: src, sTop: sTop, callback: callback });
+      return new LazyLoader({ img: img, src: src, dSrc: dSrc, sTop: sTop, callback: callback });
     }
   }]);
 

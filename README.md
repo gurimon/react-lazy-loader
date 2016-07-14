@@ -50,6 +50,16 @@ export default ImageList;
 ### src
 Type: String Default: null Required: true
 
+### defaultSrc
+Type: String Default: null
+
+The picture when failing in reading of a picture.
+
+### isLoad
+Type: bool Default: true
+
+The cartoon film which reads a picture is indicated.
+
 ## License
 
 MIT
