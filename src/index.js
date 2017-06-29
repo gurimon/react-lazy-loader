@@ -1,68 +1,100 @@
-import React from 'react';
-import LazyLoader from './loader';
-import LoadingElement from './loading-element';
 
-const LazyLoad = React.createClass({
-  getDefaultProps() {
-    return {
-      isLoad:     true,
-      src:        "",
-      defaultSrc: "",
-    }
-  },
+/**
+ * LazyLoad
+ * 画像遅延読み込み
+ * NOTE: findDOMNodeで現在の位置を取得しているので親要素でposition: xxx;を指定してしまうと位置が取得できないので注意してください。
+ *
+ * import LazyLoad from 'react-lazy-loader/index'
+ * <Lazyload src={ 画像パス }>
+ * 　　表示したいコンポーネント
+ * </LazyLoad>
+ */
 
-  getInitialState() {
-    return {
+
+import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
+import Loader from './loader';
+
+class LazyLoad extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       src:      null,
       isLoaded: false,
-      isError:  false,
     }
-  },
+  }
 
   componentDidMount() {
-    if(!this.isMounted()) return;
-    const src = this.props.src;
-    const defaultSrc = this.props.defaultSrc;
+    if (this.state.isLoaded) return;
+    const { src, defaultSrc } = this.props;
     // 要素の位置取得
-    const sTop = this.getDOMNode().getBoundingClientRect().top || 0;
+    const sTop = findDOMNode(this).offsetTop;
     // 既に読み込まれていたら
-    const isChash = LazyLoader.chash.indexOf(src) >= 0;
+    const isChash = Loader.chash.indexOf(src) >= 0;
     if(isChash) return this._onLoad({ src });
 
-    LazyLoader.createLoader({ src, dSrc: defaultSrc, sTop, callback: this._onLoad });
-  },
+    Loader.createLoader({
+      src,
+      dSrc: defaultSrc,
+      sTop,
+      callback: (src) => this._onLoad(src)
+    });
+  }
 
   // コンポーネントが削除された場合、遅延読み込みをリセット
   componentWillUnmount() {
-    LazyLoader.clearLoader();
-  },
+    Loader.clearLoader();
+  }
 
   _onLoad({ src }) {
-    if(!this.isMounted()) return;
-    this.setState({ src });
-  },
-
-  loadHandler() {
-    if(!this.isMounted()) return;
-    this.setState({ isLoaded: true });
-  },
-
-  errorHander() {
-    if(!this.isMounted()) return;
-    this.setState({ isError: true, isLoaded: true });
-  },
+    this.setState({ src, isLoaded: true });
+  }
 
   render() {
-    if(!this.state.src && this.props.isLoad) return <LoadingElement />;
-
     return (
-      <div className="lazyLoader">
-        {!this.state.isError && this.state.src ?
-          <img onLoad={this.loadHandler} onError={this.errorHander} src={this.state.src} />
-        : null}
+      <div
+        style={ this.props.style }
+        className={ this.props.className ? `lazyload ${this.props.className}` : `lazyload` }
+        onTouchTap={ this.props.onClick }
+      >
+        <div
+          className={ this.state.isLoaded
+            ?
+            `lazyload__inner lazyload__inner--show`
+            :
+            `lazyload__inner`
+          }
+        >
+          { this.state.src && this.props.children
+            ?
+            this.props.children
+            :
+            this.state.src
+            ?
+            <img src={ this.state.src } />
+            :
+            null
+          }
+        </div>
       </div>
     )
   }
-});
+};
+
+LazyLoad.propTypes = {
+  className : PropTypes.string,
+  onClick   : PropTypes.func,
+  src       : PropTypes.string,
+  defaultSrc: PropTypes.string,
+  style     : PropTypes.object
+}
+
+LazyLoad.defaultProps = {
+  className: '',
+  onClick  : null,
+  src      : '',
+  style    : {},
+}
 
 export default LazyLoad;

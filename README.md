@@ -2,20 +2,23 @@
 
 If a picture appears in the screen, a picture is read.
 
+> React v15.4.2  
+> react-dom v15.4.2
+
 ```sh
+$ yarn add react-lazy-loader
+
+or
+
 $ npm i -S react-lazy-loader
 ```
 
 ## Usage
 
 ```javascript
-// ES2015 imports
 import LazyLoader from 'react-lazy-loader';
 
-// ES5 require
-var LazyLoader = require('react-lazy-loader');
-
-<LazyLoader src={path} />
+<LazyLoader src={ path } />
 ```
 
 #### Use with React
@@ -24,23 +27,33 @@ var LazyLoader = require('react-lazy-loader');
 import React from 'react';
 import LazyLoader from 'react-lazy-loader';
 
-const ImageList = React.createClass({
-  render() {
-    return (
-      <div className="imageList">
-        <LazyLoader src="./imageList_1.jpg" />
+const ImageList = props => {
+  return (
+    <div className="imageList">
+      <LazyLoader src="./imageList_1.jpg" />
 
-        <LazyLoader src="./imageList_2.jpg" />
+      <LazyLoader src="./imageList_2.jpg" />
 
-        <LazyLoader src="./imageList_3.jpg" />
+      <LazyLoader src="./imageList_3.jpg" />
 
-        <LazyLoader src="./imageList_4.jpg" />
+      <LazyLoader
+        src="./imageList_4.jpg"
+        defaultSrc="./imageList_4_1.jpg"
+        onClick={ () => this.onClick() }
+      />
 
-        <LazyLoader src="./imageList_5.jpg" />
-      </div>
-    )
-  }
-});
+      <LazyLoader
+        src="./imageList_5.jpg"
+      >
+        <article>
+          <h1>image</h1>
+          <img src="./imageList_5.jpg" />
+          <p>i.m.a.g.e</p>
+        </article>
+      </LazyLoader>
+    </div>
+  )
+};
 
 export default ImageList;
 ```
@@ -55,10 +68,14 @@ Type: String Default: null
 
 The picture when failing in reading of a picture.
 
-### isLoad
-Type: bool Default: true
+### style
+Type: Object Default: {}
 
-The cartoon film which reads a picture is indicated.
+### className
+Type: String Default:
+
+### onClick
+Type: Func Default: null
 
 ## License
 

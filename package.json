@@ -1,6 +1,6 @@
 {
   "name": "react-lazy-loader",
-  "version": "0.1.5",
+  "version": "1.0.0",
   "description": "If a picture appears in the screen, a picture is read.",
   "main": "./dist/index.js",
   "scripts": {
@@ -23,6 +23,8 @@
   },
   "homepage": "https://github.com/gurimon/react-lazy-loader#readme",
   "devDependencies": {
+    "react": "15.4.2",
+    "react-dom": "15.4.2",
     "babel-cli": "6.10.1",
     "babel-core": "6.10.4",
     "babel-loader": "6.2.4",

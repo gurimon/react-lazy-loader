@@ -25,50 +25,56 @@ class ScrollLazyLoader {
       this.createLoader(params);
     }
 
-    window.addEventListener('scroll', this.scrollHandler);
-    window.addEventListener('resize', this.resizeHandler);
+    window.addEventListener('scroll', () => this.scrollHandler());
+    window.addEventListener('resize', () => this.resizeHandler());
   }
 
   static initiative() {
-    const body = document.body || document.documentElement;
+    const isMatch = navigator.userAgent.toLowerCase().match(/webkit/);
+    const body = isMatch ? document.body : document.documentElement;
     const sTop = body ? body.scrollTop : 0;
-    const wHeight = body ? body.clientHeight : 0;
+    const wHeight = window.innerHeight || body.clientHeight || 0;
     return new ScrollLazyLoader({ body, sTop, wHeight });
   }
 
   onScroller() {
+    if(ScrollLazyLoader.timer) clearTimeout(ScrollLazyLoader.timer);
     const ld = ScrollLazyLoader.lds[0] || null;
     if(!this.body || !ld) return;
     this.sTop = this.body.scrollTop;
     this.loadPoint = this.sTop + this.wHeight;
 
-    this.loader(ld);
+    ScrollLazyLoader.timer = setTimeout(() => {
+      this.loader(ld);
+    }, 500);
   }
 
   onResizer() {
+    if(ScrollLazyLoader.timer) clearTimeout(ScrollLazyLoader.timer);
     const ld = ScrollLazyLoader.lds[0] || null;
     if(!this.body || !ld) return;
     this.wHeight = this.body.clientHeight;
     this.loadPoint = this.sTop + this.wHeight;
 
-    this.loader(ld);
+    ScrollLazyLoader.timer = setTimeout(() => {
+      this.loader(ld);
+    }, 500);
   }
 
   createLoader(params) {
     const ld = LazyLoader.createLazyLoader(params);
     ScrollLazyLoader.lds.push(ld);
 
-    if(ScrollLazyLoader.lds.length === 1) {
+    if(ScrollLazyLoader.lds.length === 1 || ((this.loadPoint > ld.sTop) && !ScrollLazyLoader.timer)) {
       this.loader(ld);
     }
   }
 
   loader(ld) {
     if(this.loadPoint < ld.sTop) return;
-    if(ScrollLazyLoader.timer) clearTimeout(ScrollLazyLoader.timer);
-    ld.load();
 
     ScrollLazyLoader.timer = setTimeout(() => {
+      ld.load();
       ScrollLazyLoader.chash.push(ld.src);
       ScrollLazyLoader.lds.shift();
       const _ld = ScrollLazyLoader.lds[0] || null;
@@ -81,8 +87,11 @@ class ScrollLazyLoader {
     if(ScrollLazyLoader.timer) clearTimeout(ScrollLazyLoader.timer);
     if(!ScrollLazyLoader.lds.length) return;
     ScrollLazyLoader.lds = [];
+
+    window.removeEventListener('scroll', () => this.scrollHandler());
+    window.removeEventListener('resize', () => this.resizeHandler());
   }
-}
+};
 
 ScrollLazyLoader.timer = null;
 ScrollLazyLoader.chash = [];
